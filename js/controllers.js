@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['highcharts-ng'])
   .controller('TabCtrl', function ($scope, $http, $rootScope, $ionicPopup, $timeout, $state, WenZhenMsgHandler) {
     //用户登录成功后
-    $rootScope.socket = io.connect('http://192.168.0.22:3001');
+    $rootScope.socket = io.connect('https://192.168.0.22:3002');
     var confirmPopup = null;
     $rootScope.showWenZhenInfo = false;
     $rootScope.badgeCount = '';
@@ -115,7 +115,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       console.log($stateParams.wz);
       //从后台获取咨询消息列表
       $http({
-        url: 'http://192.168.0.22:3001/zxlist',
+        url: 'https://192.168.0.22:3002/zxlist',
         method: 'get'
       }).success(function (data) {
         $scope.messages = data.messages;
