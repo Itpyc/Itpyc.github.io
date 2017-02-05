@@ -5,6 +5,7 @@ var filesToCache = [
   '/js/app.js',
   '/js/controllers.js',
   '/js/services.js',
+   '/lib/socket.io.js',
   '/lib/ionic/js/ionic.bundle.js',
   '/js/highcharts-ng.js',
   '/js/highcharts.src.js',
