@@ -9,6 +9,7 @@ var filesToCache = [
   '/js/highcharts-ng.js',
   '/js/highcharts.src.js',
  /* '/lib/socket.io.js',*/
+
   '/lib/ionic/css/ionic.css',
   '/css/component.css',
   '/css/webchat.css',
