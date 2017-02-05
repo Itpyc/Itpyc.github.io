@@ -26,6 +26,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
         }
       });
     };
+
     $rootScope.ws.onmessage=function (evt) {
       console.log( evt.data);
       var message = JSON.parse(evt.data);
