@@ -37,7 +37,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
         WenZhenMsgHandler.setWzMsg(message); //保存问诊消息
         $rootScope.wenzhenInfo = message;
       }
-
     }
 
  /*   $rootScope.socket.on('wenzhenMsg', function (msg) { //收到问诊消息
