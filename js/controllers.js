@@ -1,7 +1,12 @@
 angular.module('starter.controllers', ['highcharts-ng'])
   .controller('TabCtrl', function ($scope, $http, $rootScope, $ionicPopup, $timeout, $state, WenZhenMsgHandler) {
     //用户登录成功后llll
-    $rootScope.socket = io.connect('https://192.168.0.22:3002');
+    /* $rootScope.socket = io.connect('https://192.168.0.22:3002');*/
+  /*  $rootScope.socket = io.connect('http://192.168.0.22:3001');*/
+    $rootScope.ws = new WebSocket("ws://192.168.0.22:3000");
+    $rootScope.ws.onopen = function () {
+      console.log('打开了')
+    };
     var confirmPopup = null;
     $rootScope.showWenZhenInfo = false;
     $rootScope.badgeCount = '';
@@ -21,14 +26,28 @@ angular.module('starter.controllers', ['highcharts-ng'])
         }
       });
     };
-    $rootScope.socket.on('wenzhenMsg', function (msg) { //收到问诊消息
+    $rootScope.ws.onmessage=function (evt) {
+      console.log( evt.data);
+      var message = JSON.parse(evt.data);
+      if(message.type=="huizhenMsg"){
+        console.log('收到问诊消息')
+        WenZhenMsgHandler.initStatus(); //初始化状态
+        $scope.showConfirm(); //打开确定提示框
+        WenZhenMsgHandler.startTimer(confirmPopup); //启动定时器
+        WenZhenMsgHandler.setWzMsg(message); //保存问诊消息
+        $rootScope.wenzhenInfo = message;
+      }
+
+    }
+
+ /*   $rootScope.socket.on('wenzhenMsg', function (msg) { //收到问诊消息
       console.log('收到问诊消息')
       WenZhenMsgHandler.initStatus(); //初始化状态
       $scope.showConfirm(); //打开确定提示框
       WenZhenMsgHandler.startTimer(confirmPopup); //启动定时器
       WenZhenMsgHandler.setWzMsg(msg); //保存问诊消息
       $rootScope.wenzhenInfo = msg;
-    });
+    });*/
   })
   .controller('LoginCtrl', function ($scope, Auth, $http, $state) {
     //用户点击登录
@@ -105,25 +124,26 @@ angular.module('starter.controllers', ['highcharts-ng'])
       checked: true,
     };
   })
-  .controller('MsgCtrl', function ($scope, $state, $rootScope, $interval, WenZhenMsgHandler, $stateParams, $http,ZXMsg) {
+  .controller('MsgCtrl', function ($scope, $state, $rootScope, $interval, WenZhenMsgHandler, $stateParams, $http, ZXMsg) {
     $scope.goToDetail = function (userId) {
       console.log(userId);
-      $state.go('tab.zixun',{userId:userId});
+      $state.go('tab.zixun', {userId: userId});
     };
     //进入房间,从后台获取消息列表
     $scope.$on('$ionicView.enter', function () {
       console.log($stateParams.wz);
       //从后台获取咨询消息列表
       $http({
-        url: 'https://192.168.0.22:3002/zxlist',
+        /*  url: 'https://192.168.0.22:3002/zxlist',*/
+        url: 'http://192.168.0.22:3001/zxlist',
         method: 'get'
       }).success(function (data) {
         $scope.messages = data.messages;
         ZXMsg.init($scope.messages);
       }).error(function () {
       });
-  /*    $scope.messages=  ZXMsg.init();
-      console.log($scope.messages)*/
+      /*    $scope.messages=  ZXMsg.init();
+       console.log($scope.messages)*/
       var wzStatus = $stateParams.wz;
       if (wzStatus === '1') { //如果是从问诊提示的popup中来的
         $rootScope.showWenZhenInfo = true;
@@ -266,7 +286,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       });
     }
   })
-  .controller('ZXCtrl', function ($scope, $rootScope, $ionicScrollDelegate,ZXMsg,$stateParams,$timeout) {
+  .controller('ZXCtrl', function ($scope, $rootScope, $ionicScrollDelegate, ZXMsg, $stateParams, $timeout) {
     var viewScroll = $ionicScrollDelegate.$getByHandle('messageDetailsScroll');
     $scope.data = {};
     $scope.messageDetails = ZXMsg.getMessageById($stateParams.userId).message;
@@ -291,7 +311,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $rootScope.socket.on('zxMsg', function (data) {
       $timeout(function () {
         viewScroll.scrollBottom();
-      },0)
+      }, 0)
       $scope.messageDetails.push(data);
     });
   })
