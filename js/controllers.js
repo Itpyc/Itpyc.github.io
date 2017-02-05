@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     //用户登录成功后llll
     /* $rootScope.socket = io.connect('https://192.168.0.22:3002');*/
   /*  $rootScope.socket = io.connect('http://192.168.0.22:3001');*/
-    $rootScope.ws = new WebSocket("ws://192.168.0.22:3000");
+    $rootScope.ws = new WebSocket("wss://192.168.0.22:3000");
     $rootScope.ws.onopen = function () {
       console.log('打开了')
     };
@@ -26,7 +26,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
         }
       });
     };
-    
+
     $rootScope.ws.onmessage=function (evt) {
       console.log( evt.data);
       var message = JSON.parse(evt.data);
