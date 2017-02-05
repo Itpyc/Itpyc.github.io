@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['highcharts-ng'])
   .controller('TabCtrl', function ($scope, $http, $rootScope, $ionicPopup, $timeout, $state, WenZhenMsgHandler) {
-    //用户登录成功后
+    //用户登录成功后llll
     $rootScope.socket = io.connect('https://192.168.0.22:3002');
     var confirmPopup = null;
     $rootScope.showWenZhenInfo = false;
