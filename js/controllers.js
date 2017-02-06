@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     //用户登录成功后llll
     /* $rootScope.socket = io.connect('https://192.168.0.22:3002');*/
   /*  $rootScope.socket = io.connect('http://192.168.0.22:3001');*/
-    $rootScope.ws = new WebSocket("wss://itpyc.club:3000/");
+    $rootScope.ws = new WebSocket("wss://lwys.club:3000/");
     $rootScope.ws.onopen = function () {
       console.log('打开了')
     };
@@ -135,7 +135,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       //从后台获取咨询消息列表
       $http({
         /*  url: 'https://192.168.0.22:3002/zxlist',*/
-        url: 'http://itpyc.club:3000/zxlist',
+        url: 'http://lwys.club:3000/zxlist',
         method: 'get'
       }).success(function (data) {
         $scope.messages = data.messages;
